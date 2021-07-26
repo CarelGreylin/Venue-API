@@ -4,13 +4,13 @@ Searches the venues database and retrieves venues based on certain parameters.
 """
 
 import src.data as d
-import bisect
-from src.distance import distance_to_venue as distance
+from math import dist
 
 def closest_venues_by_category(latitude, longitude, limit=d.DEFAULT_LIMIT):
-    """Returns at most @limit venues sorted by their distance (increasing) from 
-    @latitude and @longitude. Venues are structured under their categories and
-    seconderily sorted alphabetically.
+    """Returns venues sorted by their distance (increasing) from 
+    @latitude and @longitude. Venues are structured under their categories. 
+    Categories with the most venues appear first, and are then sorted 
+    alphabetically. There are at most @limit venues for each category.
 
     Params:
         @latitude: Float used as the current latitude in the distance calculation.
@@ -20,36 +20,41 @@ def closest_venues_by_category(latitude, longitude, limit=d.DEFAULT_LIMIT):
     Returns:
         A list of objects in the form:
             {
-                "category": Category1,
+                "category": "Category1",
                 "venues": [
                     {
-                        "name": Venue1,
-                        "address": Address1
+                        "name": "Venue1",
+                        "address": "Address1"
                     },
                     {
-                        "name": Venue2,
-                        "address": Address2
+                        "name": "Venue2",
+                        "address": "Address2"
                     },
                 ]
             }
     
     Raises:
-
+        None
     """
-    # Calculate distance of all venues and get categories
+    # Calculate distance of all venues and collect categories in a dictionary.
     venues_distance = []
     categories = {}
     for venue in d.VENUES:
         venue_details = venue
-        venue_details["distance"] = distance(venue, latitude, longitude)
+        venue_details["distance"] = dist(
+            [venue["latitude"], venue["longitude"]], 
+            [latitude, longitude]
+        )
         venues_distance.append(venue_details)
+
+        # Add category to the dictionary as a key with an empty list
         for category in venue["categories"]:
             categories[category] = []
 
     # Sort venues by distance
     sorted_venues = sorted(venues_distance, key= lambda k: k["distance"])
 
-    # Insert venues into list until limit is reached.
+    # Insert venues into their category lists until limit is reached.
     for venue in sorted_venues:
         for category in venue["categories"]:
             if len(categories[category]) < limit:
@@ -58,6 +63,7 @@ def closest_venues_by_category(latitude, longitude, limit=d.DEFAULT_LIMIT):
                     "address" : venue["address"],
                 })
 
+    # Construct the shape of the final return value
     categories = [
         {
             "category" : category,

@@ -32,7 +32,3 @@ def load_data(file_path=DATA_FILE):
         venue["longitude"] = float(venue["longitude"])
         VENUES.append(venue)
     file.close()
-
-if __name__ == "__main__":
-    load_data(DATA_FILE)
-    print(VENUES)
