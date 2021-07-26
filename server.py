@@ -22,9 +22,10 @@ APP.register_error_handler(Exception, defaultHandler)
 
 @APP.route("/venues/by_category", methods = ["GET"])
 def get_channels_by_category():
-    """Route for calling the venues_by_category function.
+    """API route that performs error handling before calling the 
+    closest_venues_by_category function to return the result in JSON format.
     
-    Raises InputError for any invalid parameters provided.
+    Raises InputError for any invalid URL parameters provided.
     """
     # Get arguments from request
     latitude = request.args.get("latitude")

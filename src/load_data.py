@@ -6,7 +6,8 @@ from src.data import VENUES, DATA_FILE
 import csv
 
 def load_data(file_path=DATA_FILE):
-    """Fill database with data from @file_path
+    """Fill database with data from @file_path. Assumes file is formatted
+    correctly.
     
     Read data line by line from a csv file and format it into a dictionary.
 
