@@ -42,13 +42,9 @@ def closest_venues_by_category(latitude, longitude, limit=d.DEFAULT_LIMIT):
     for venue in d.VENUES:
         venue_details = venue
         venue_details["distance"] = distance(venue, latitude, longitude)
+        venues_distance.append(venue_details)
         for category in venue["categories"]:
             categories[category] = []
-            # category_entry = {
-            #     category : [],
-            # }
-            # if not category_entry in categories:
-            #     categories.append(category_entry)
 
     # Sort venues by distance
     sorted_venues = sorted(venues_distance, key= lambda k: k["distance"])
@@ -62,7 +58,7 @@ def closest_venues_by_category(latitude, longitude, limit=d.DEFAULT_LIMIT):
                     "address" : venue["address"],
                 })
 
-    return [
+    categories = [
         {
             "category" : category,
             "venues" : categories[category],
@@ -70,3 +66,10 @@ def closest_venues_by_category(latitude, longitude, limit=d.DEFAULT_LIMIT):
         for category in categories
     ]
 
+    # Sort categories by the amount of venues found and then alphabetically
+    sorted_categories = sorted(
+        categories, 
+        key= lambda k: (limit - len(k["venues"]), k["category"])
+    )
+
+    return sorted_categories

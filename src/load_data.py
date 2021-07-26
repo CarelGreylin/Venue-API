@@ -5,7 +5,7 @@ Reads and formats csv data into the VENUES variable using the csv module.
 from src.data import VENUES, DATA_FILE
 import csv
 
-def load_data(file_path):
+def load_data(file_path=DATA_FILE):
     """Fill database with data from @file_path
     
     Read data line by line from a csv file and format it into a dictionary.
@@ -28,6 +28,8 @@ def load_data(file_path):
     for venue in csv_reader:
         # Split categories
         venue["categories"] = venue["categories"].split(',')
+        venue["latitude"] = float(venue["latitude"])
+        venue["longitude"] = float(venue["longitude"])
         VENUES.append(venue)
     file.close()
 
