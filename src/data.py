@@ -1,5 +1,5 @@
 """
-    File for storing all data variables.
+    File for storing all data variables and constants.
 """
 
 """
@@ -18,3 +18,6 @@
     }
 """
 VENUES = []
+
+# CONSTANTS
+DATA_FILE = "venues.csv"
