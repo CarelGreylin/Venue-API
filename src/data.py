@@ -1,23 +1,23 @@
-"""
-    File for storing all data variables and constants.
-"""
+""" File for storing constants and database files.
 
-"""
-    List of venues where each venue is of the form:
-    {
-        name: "string",
-        address: "string",
-        categories: [
-            "string",
-            "string",
-            ...,
-            "string"
-        ],
-        latitude: number,
-        longitude: number,
-    }
+Venues database stored as a list of venues where each venue is of the form:
+{
+    name: "string",
+    address: "string",
+    categories: [
+        "string",
+        "string",
+        ...,
+        "string"
+    ],
+    latitude: number,
+    longitude: number,
+}
 """
 VENUES = []
 
-# CONSTANTS
+# Constants
+DEFAULT_LIMIT = 10
+
+# Files
 DATA_FILE = "venues.csv"
