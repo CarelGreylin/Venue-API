@@ -56,7 +56,6 @@ def test_null():
     assert expected == response.json()
 
 def test_negative_lim():
-    expected = []
     latitude = 49
     longitude = -97
     limit = -3
