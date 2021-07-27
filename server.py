@@ -3,6 +3,7 @@ from flask import Flask, request
 from json import dumps
 from src.load_data import load_data
 from src.venues import closest_venues_by_category
+from src.config import PORT
 
 def defaultHandler(err):
     response = err.get_response()
@@ -42,9 +43,11 @@ def get_channels_by_category():
     else:
         raise InputError("Missing coordinate parameter")
     
-    # Check and validate limit parameter
+    # Validate limit parameter
     if limit:
         try:
+            if (int(limit) < 0):
+                raise InputError("Limit should be a positive integer.")
             categories = \
                 closest_venues_by_category(latitude, longitude, int(limit))
         except:
@@ -53,9 +56,9 @@ def get_channels_by_category():
         categories = closest_venues_by_category(latitude, longitude)
     
     # Return result in JSON format
-    return dumps(categories)
+    return dumps(categories, indent=2)
 
 if __name__ == "__main__":
     load_data()
 
-    APP.run(port = 8080)
+    APP.run(port = PORT)

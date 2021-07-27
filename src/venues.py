@@ -55,13 +55,12 @@ def closest_venues_by_category(latitude, longitude, limit=d.DEFAULT_LIMIT):
     sorted_venues = sorted(venues_distance, key= lambda k: k["distance"])
 
     # Insert venues into their category lists until limit is reached.
-    for venue in sorted_venues:
+    for venue in sorted_venues[:limit]:
         for category in venue["categories"]:
-            if len(categories[category]) < limit:
-                categories[category].append({
-                    "name" : venue["name"],
-                    "address" : venue["address"],
-                })
+            categories[category].append({
+                "name" : venue["name"],
+                "address" : venue["address"],
+            })
 
     # Construct the shape of the final return value
     categories = [
@@ -69,13 +68,13 @@ def closest_venues_by_category(latitude, longitude, limit=d.DEFAULT_LIMIT):
             "category" : category,
             "venues" : categories[category],
         }
-        for category in categories
+        for category in categories if len(categories[category]) > 0
     ]
 
     # Sort categories by the amount of venues found and then alphabetically
     sorted_categories = sorted(
         categories, 
-        key= lambda k: (limit - len(k["venues"]), k["category"])
+        key= lambda k: (limit - len(k["venues"]), k["category"].lower())
     )
 
     return sorted_categories
